@@ -8,21 +8,21 @@ import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
+// import TableContainer from "@material-ui/core/TableContainer";
+// import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Slider from "@material-ui/core/Slider";
+// import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import clsx from 'clsx';
-import Badge from '@material-ui/core/Badge';
-import ClearIcon from '@material-ui/icons/Clear';
+// import Container from "@material-ui/core/Container";
+import clsx from "clsx";
+import Badge from "@material-ui/core/Badge";
+import ClearIcon from "@material-ui/icons/Clear";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import SeeMore from "./SeeMore"
+// import DialogTitle from "@material-ui/core/DialogTitle";
+import SeeMore from "./SeeMore";
 import firebase from "../shared/firebase";
 
 const db = firebase.database().ref();
@@ -32,12 +32,6 @@ const useStyles = makeStyles({
     margin: "auto",
     minWidth: "35%",
     boxShadow: "3px 3px 25px 2px rgba(0,0,0,0.5)",
-    // marginLeft: "5%",
-    // marginRight: "5%",
-    // overflow: "auto",
-    // marginTop: "50px",
-    // display: "inline-block",
-    // border: "1px solid black"
   },
   title: {
     fontSize: 14,
@@ -96,8 +90,8 @@ const useStyles = makeStyles({
     width: "50px",
     backgroundColor: "#14ECF5",
   },
-  update:{
-    display:"flex",
+  update: {
+    display: "flex",
     justifyContent: "center",
     flexDirection: "column",
   },
@@ -123,7 +117,7 @@ const useStyles = makeStyles({
 const Goal = ({ goal, user }) => {
   const [progress, setProgress] = useState(0);
   const [checkedIn, setCheckedIn] = useState(false);
-  
+
   const [circle1Ref, setCircle1Ref] = useState(React.createRef());
   const [circle2Ref, setCircle2Ref] = useState(React.createRef());
   const [circle1Left, setCircle1Left] = useState(0);
@@ -155,13 +149,12 @@ const Goal = ({ goal, user }) => {
   const classes = useStyles();
 
   useEffect(() => {
-
     let users = Object.keys(goal["progress"]);
     for (let j = 0; j <= getDayOn(); j++) {
-      console.log(users[0])
-      console.log(users[1])
-      console.log(goal["progress"][users[0]][j])
-      console.log(goal["progress"][users[1]][j])
+      console.log(users[0]);
+      console.log(users[1]);
+      console.log(goal["progress"][users[0]][j]);
+      console.log(goal["progress"][users[1]][j]);
       if (goal["progress"][users[0]][j] == undefined) {
         db.child("goals")
           .child(goal["key"])
@@ -262,7 +255,7 @@ const Goal = ({ goal, user }) => {
     if (progress === "") {
       alert("Not a number");
     } else {
-      if (goal['goalType'] == 'Quantitative'){
+      if (goal["goalType"] == "Quantitative") {
         db.child("goals")
           .child(goal["key"])
           .child("progress")
@@ -318,27 +311,33 @@ const Goal = ({ goal, user }) => {
   };
 
   const deleteGoal = () => {
-    if(user.uid===goal.groupMembers.creator) {
-      db.child('users').child(goal.groupMembers.creator).child('goals').child(goal.key).set(null);
-      db.child('goals').child(goal.key).child('deleted').set(true);
-    }
-    else {
-      db.child('users').child(goal.groupMembers.invitee).child('invites').child(goal.key).set(null);
-      db.child('goals').child(goal.key).child('deleted').set(true);
+    if (user.uid === goal.groupMembers.creator) {
+      db.child("users")
+        .child(goal.groupMembers.creator)
+        .child("goals")
+        .child(goal.key)
+        .set(null);
+      db.child("goals").child(goal.key).child("deleted").set(true);
+    } else {
+      db.child("users")
+        .child(goal.groupMembers.invitee)
+        .child("invites")
+        .child(goal.key)
+        .set(null);
+      db.child("goals").child(goal.key).child("deleted").set(true);
     }
     // db.child('goals').child(goal.key).set(null);
-  }
+  };
 
   const archiveGoal = () => {
-    if(user.uid===goal.groupMembers.creator) {
-      db.child('goals').child(goal.key).child('archivedCreator').set(true);
-    }
-    else {
-      db.child('goals').child(goal.key).child('archivedInvitee').set(true);
+    if (user.uid === goal.groupMembers.creator) {
+      db.child("goals").child(goal.key).child("archivedCreator").set(true);
+    } else {
+      db.child("goals").child(goal.key).child("archivedInvitee").set(true);
     }
     setOpen(false);
     // db.child('goals').child(goal.key).set(null);
-  }
+  };
 
   return (
     <Badge
@@ -352,21 +351,23 @@ const Goal = ({ goal, user }) => {
         )
       }
     >
-      <Badge 
-      badgeContent={<ClearIcon onClick={()=>setOpen(true)}/>} 
-      color="primary"
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      <Badge
+        badgeContent={<ClearIcon onClick={() => setOpen(true)} />}
+        color="primary"
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
       >
-        <Dialog open={open} onClose={()=>setOpen(false)}>
+        <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogContent>
             Are you sure you want to archive or delete this goal?
           </DialogContent>
           <DialogActions>
-            <Button onClick={()=>setOpen(false)}>Cancel</Button>
-            {goal.confirmed? <Button onClick={archiveGoal}>Archive</Button> : null}
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            {goal.confirmed ? (
+              <Button onClick={archiveGoal}>Archive</Button>
+            ) : null}
             <Button onClick={deleteGoal}>Delete</Button>
           </DialogActions>
         </Dialog>
@@ -380,7 +381,7 @@ const Goal = ({ goal, user }) => {
                 <br></br>
                 Started: {goal["startDate"]}
                 <br></br>
-                Days Left: {goal["duration"] * 7 - getDayOn()}  
+                Days Left: {goal["duration"] * 7 - getDayOn()}
                 <br></br>
               </Typography>
             </div>
@@ -465,19 +466,30 @@ const Goal = ({ goal, user }) => {
               <Typography>
                 <b>Day {getDayOn()} </b>
               </Typography>
-              {(goal.deleted||goal.rejected)?<Typography>{goal.rejected? "Your friend has rejected the goal invite." :"Your friend has removed the goal."}</Typography>:<div style={{height:'23px'}}></div>}
-              <Typography >
+              {goal.deleted || goal.rejected ? (
+                <Typography>
+                  {goal.rejected
+                    ? "Your friend has rejected the goal invite."
+                    : "Your friend has removed the goal."}
+                </Typography>
+              ) : (
+                <div style={{ height: "23px" }}></div>
+              )}
+              <Typography>
                 Daily Goal: {goal["minimum"]} {goal["metric"]}
               </Typography>
-              {goal["goalType"] === "Quantitative" ? 
-              <TextField
-                variant="outlined"
-                type="number"
-                onChange={saveProgress}
-                defaultValue={progress}
-                size="small"
-                style={{ width: "176px" }}
-              /> : <div style={{height:'40px'}}></div> }
+              {goal["goalType"] === "Quantitative" ? (
+                <TextField
+                  variant="outlined"
+                  type="number"
+                  onChange={saveProgress}
+                  defaultValue={progress}
+                  size="small"
+                  style={{ width: "176px" }}
+                />
+              ) : (
+                <div style={{ height: "40px" }}></div>
+              )}
               <Button
                 size="medium"
                 variant="contained"
@@ -485,21 +497,23 @@ const Goal = ({ goal, user }) => {
                 style={{ marginTop: "10px" }}
                 onClick={updateProgress}
               >
-                 {goal["goalType"] === "Quantitative" ? 'Update Progress' : 'Mark Complete' } 
+                {goal["goalType"] === "Quantitative"
+                  ? "Update Progress"
+                  : "Mark Complete"}
               </Button>
             </CardActions>
 
-            <CardActions style={{marginBottom:'-15px'}}>
+            <CardActions style={{ marginBottom: "-15px" }}>
               <Button
                 size="medium"
                 variant="contained"
                 color="secondary"
                 onClick={setReminder}
-                style={{width:"56%"}}
+                style={{ width: "56%" }}
               >
                 Remind Friend
               </Button>
-              <SeeMore goal={goal}/>
+              <SeeMore goal={goal} />
             </CardActions>
             {/* <div style={{ marginTop:"5px", marginBottom:"30px"}}>
               <div style={{float:"left", marginRight: "10px"}}>
