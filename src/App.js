@@ -13,7 +13,7 @@ import firebase from "./shared/firebase";
 // import ToggleButtons from './Toggle'
 import Badge from "@material-ui/core/Badge";
 
-import MailIcon from "@material-ui/icons/Mail";
+// import MailIcon from "@material-ui/icons/Mail";
 
 import HomeIcon from "@material-ui/icons/Home";
 
